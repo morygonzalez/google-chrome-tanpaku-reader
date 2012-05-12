@@ -10,7 +10,7 @@ setLastVisitedEpoch = (epoch) ->
 
 updateEntryList = (callback) ->
   $.ajax
-    url: 'http://blog.hatena.ne.jp/-/antenna'
+    url: 'http://tanpaku.grouptube.jp/'
     dataType: 'html'
     success: (res) ->
 
@@ -20,23 +20,24 @@ updateEntryList = (callback) ->
         keyTime = getLastVisitedEpoch()
 
       # $.each と Array.reverse を組み合わせたので ごちゃっとしてる 旧→新 の順で見るため
-      $($(res).find('ol.antenna li').get().reverse()).each ->
+      $($(res).find('ul.information li.info_notice').get().reverse()).each ->
         entry_titles = $(this).contents().filter(-> this.nodeType == 3 && this.textContent.match(/\S/))
         if entry_titles.length > 0
           entry_title = entry_titles[0].textContent
         else
           entry_title = '■'
         entry =
-          blog_title: $(this).find('a').text()
+          # blog_title: $(this).find('a').text()
           entry_title: entry_title
           entry_url:   $(this).find('a').attr('href')
-          user_image: $(this).find('img').attr('src')
-          user_name: $(this).attr('data-author')
-          time: + $(this).find('time').attr('data-epoch')
-          time_text: $(this).find('time').text()
+          # user_image: $(this).find('img').attr('src')
+          # user_name: $(this).attr('data-author')
+          # time: + $(this).find('time').attr('data-epoch')
+          # time_text: $(this).find('time').text()
 
-        if entry.time > keyTime
-          entryList.push entry
+        entryList.push entry
+        # if entry.time > keyTime
+        #   entryList.push entry
 
       callback() if callback
 
