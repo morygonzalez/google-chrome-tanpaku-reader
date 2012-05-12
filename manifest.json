@@ -1,10 +1,10 @@
 {
-    "name": "はてなブログ新着",
+    "name": "タンパク新着",
     "version": "1.0",
-    "description": "購読中のはてなブログを読むための拡張です",
+    "description": "購読中のタンパクユーザーの日報読むための拡張です",
     "permissions" : [
         "tabs",
-        "http://blog.hatena.ne.jp/"
+        "http://tanpaku.grouptube.jp/"
     ],
     "icons": {
         "16": "icon16.png",
@@ -14,7 +14,7 @@
     "background_page" : "background.html",
     "browser_action": {
         "default_icon": "icon19.png",
-        "default_title": "はてなブログ新着",
+        "default_title": "タンパク新着",
         "popup": "popup.html"
     }
 }
