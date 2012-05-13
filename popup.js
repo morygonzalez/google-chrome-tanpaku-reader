@@ -6,7 +6,7 @@
 
   getAntenna = function(callback) {
     return $.ajax({
-      url: 'http://blog.hatena.ne.jp/-/antenna(kari)',
+      url: 'http://tanpaku.grouptube.jp/',
       dataType: 'html',
       success: function(res) {
         var items;
@@ -23,13 +23,8 @@
             entry_title = '■';
           }
           return items.push({
-            blog_title: $(this).find('a').text(),
             entry_title: entry_title,
-            entry_url: $(this).find('a').attr('href'),
-            user_image: $(this).find('img').attr('src'),
-            user_name: $(this).attr('data-author'),
-            time: $(this).find('time').attr('data-epoch'),
-            time_text: $(this).find('time').text()
+            entry_url: $(this).find('a').attr('href')
           });
         });
         return callback(items.reverse());
@@ -54,15 +49,7 @@
 
   showEntry = function(entry, unread_count) {
     openEntry(entry);
-    $('#title').text([entry.blog_title, entry.entry_title].join(' - '));
-    $('#user_icon').empty().append($('<img>').attr({
-      src: entry.user_image,
-      title: entry.user_name
-    }));
-    $('#user_name').empty().append($('<a>').attr({
-      href: "http://www.hatena.ne.jp/" + entry.user_name + "/"
-    }).text(entry.user_name));
-    $('#time_text').text(entry.time_text);
+    $('#title').text(entry.entry_title);
     return $('#unread_count').text(unread_count);
   };
 
@@ -96,12 +83,6 @@
     $('#next-button').click(function() {
       showNextEntry();
       return false;
-    });
-    $('#user_name a').live('click', function() {
-      chrome.tabs.create({
-        url: $(this).attr('href')
-      });
-      return window.close();
     });
     return $('#next-button').focus();
   });
