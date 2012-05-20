@@ -1,4 +1,5 @@
 INTERVAL = 1000 * 600
+HOST = 'http://tanpaku.grouptube.jp/'
 
 entryList = []
 
@@ -10,7 +11,7 @@ setLastVisitedEpoch = (epoch) ->
 
 updateEntryList = (callback) ->
   $.ajax
-    url: 'http://tanpaku.grouptube.jp/'
+    url: HOST
     dataType: 'html'
     success: (res) ->
 
@@ -20,24 +21,28 @@ updateEntryList = (callback) ->
         keyTime = getLastVisitedEpoch()
 
       # $.each と Array.reverse を組み合わせたので ごちゃっとしてる 旧→新 の順で見るため
-      $($(res).find('ul.information li.info_notice').get().reverse()).each ->
-        entry_titles = $(this).contents().filter(-> this.nodeType == 3 && this.textContent.match(/\S/))
+      $($(res).find('ul.information li.info_notice').get()).each ->
+        entry_titles = $(this).contents().filter(-> this.textContent.match(/\S/))
+        user_name = $(this).find('a + a').attr('href').replace(/^(event|diary|file)\/user\/(.+?)\/.*/, "$2")
         if entry_titles.length > 0
           entry_title = entry_titles[0].textContent
         else
           entry_title = '■'
         entry =
-          # blog_title: $(this).find('a').text()
+          blog_title: $(this).find('a + a').text()
           entry_title: entry_title
-          entry_url:   $(this).find('a').attr('href')
-          # user_image: $(this).find('img').attr('src')
-          # user_name: $(this).attr('data-author')
-          # time: + $(this).find('time').attr('data-epoch')
-          # time_text: $(this).find('time').text()
+          entry_url: HOST + $(this).find('a + a').attr('href')
+          user_name: user_name
+          user_image: "#{HOST}images/users/#{user_name}/icon/s.jpg"
+
+        # $(entryList).each ->
+        #   if @.entry_url != entry.entry_url
+        #     entryList.push entry
 
         entryList.push entry
-        # if entry.time > keyTime
-        #   entryList.push entry
+
+        # for e in entryList
+        #   console.log e.entry_title
 
       callback() if callback
 
@@ -66,6 +71,7 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
     entry = entryList.shift()
     len = entryList.length
     setLastVisitedEpoch(entry.time)
+    # setLastVisitedEpoch(entry.time)
     updateBadge()
     sendResponse
       entry: entry

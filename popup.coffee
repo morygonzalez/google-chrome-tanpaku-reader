@@ -1,26 +1,27 @@
+HOST = 'http://tanpaku.grouptube.jp/'
+
 entryList = []
 
 getAntenna = (callback) ->
   $.ajax
-    url: 'http://tanpaku.grouptube.jp/'
+    url: HOST
     dataType: 'html'
     success: (res) ->
       $('#indicator').hide()
       items = []
-      $(res).find('ol.antenna li').each ->
-        entry_titles = $(this).contents().filter(-> this.nodeType == 3 && this.textContent.match(/\S/))
+      $(res).find('ul.information li').each ->
+        entry_titles = $(this).contents().filter(-> this.textContent.match(/\S/))
+        user_name = $(this).find('a + a').attr('href').replace(/^(event|diary|file)\/user\/(.+?)\/.*/, "$2")
         if entry_titles.length > 0
           entry_title = entry_titles[0].textContent
         else
           entry_title = '■'
         items.push
-          # blog_title: $(this).find('a').text()
+          blog_title: $(this).find('a + a').text()
           entry_title: entry_title
-          entry_url:   $(this).find('a').attr('href')
-          # user_image: $(this).find('img').attr('src')
-          # user_name: $(this).attr('data-author')
-          # time: $(this).find('time').attr('data-epoch')
-          # time_text: $(this).find('time').text()
+          entry_url: HOST + $(this).find('a + a').attr('href')
+          user_name: user_name
+          user_image: "#{HOST}images/users/#{user_name}/icon/s.jpg"
       callback items.reverse()
 
 getUnreadCount = ->
@@ -34,10 +35,8 @@ openEntry = (entry) ->
 showEntry = (entry, unread_count) ->
   openEntry(entry)
   $('#title').text entry.entry_title
-  # $('#title').text [entry.blog_title, entry.entry_title].join(' - ')
-  # $('#user_icon').empty().append $('<img>').attr(src: entry.user_image, title: entry.user_name)
-  # $('#user_name').empty().append $('<a>').attr(href: "http://www.hatena.ne.jp/#{entry.user_name}/").text(entry.user_name)
-  # $('#time_text').text(entry.time_text)
+  $('#user_icon').empty().append $('<img>').attr(src: entry.user_image, title: entry.user_name)
+  $('#user_name').empty().append $('<a>').attr(href: "#{HOST}user/#{entry.user_name}").text(entry.user_name)
   $('#unread_count').text(unread_count)
 
 hideButton = ->
@@ -65,9 +64,9 @@ $ ->
     showNextEntry()
     false
 
-  # $('#user_name a').live 'click', ->
-  #   chrome.tabs.create
-  #     url: $(this).attr('href')
-  #   window.close()
+  $('#user_name a').live 'click', ->
+    chrome.tabs.create
+      url: $(this).attr('href')
+    window.close()
 
   $('#next-button').focus()
