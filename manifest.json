@@ -1,7 +1,7 @@
 {
     "name": "タンパク新着",
     "version": "1.0",
-    "description": "購読中のタンパクユーザーの日報読むための拡張です",
+    "description": "購読中のタンパクユーザーの日報を読むための拡張です",
     "permissions" : [
         "tabs",
         "http://tanpaku.grouptube.jp/"

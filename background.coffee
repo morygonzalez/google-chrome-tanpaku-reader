@@ -21,7 +21,7 @@ updateEntryList = (callback) ->
         keyTime = getLastVisitedEpoch()
 
       # $.each と Array.reverse を組み合わせたので ごちゃっとしてる 旧→新 の順で見るため
-      $($(res).find('ul.information li.info_notice').get()).each ->
+      $($(res).find('ul.information li.info_notice').get().reverse()).each ->
         entry_titles = $(this).contents().filter(-> this.textContent.match(/\S/))
         user_name = $(this).find('a + a').attr('href').replace(/^(event|diary|file)\/user\/(.+?)\/.*/, "$2")
         if entry_titles.length > 0
@@ -35,14 +35,14 @@ updateEntryList = (callback) ->
           user_name: user_name
           user_image: "#{HOST}images/users/#{user_name}/icon/s.jpg"
 
-        # $(entryList).each ->
-        #   if @.entry_url != entry.entry_url
-        #     entryList.push entry
+        flgDup = false
 
-        entryList.push entry
+        $(entryList).each ->
+          if @.entry_url == entry.entry_url
+            flgDup = true
 
-        # for e in entryList
-        #   console.log e.entry_title
+        unless flgDup
+          entryList.push entry
 
       callback() if callback
 
