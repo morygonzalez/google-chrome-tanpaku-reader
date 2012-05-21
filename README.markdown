@@ -11,3 +11,7 @@
 以下からダウンロードしてインストールしてください。
 
 [http://dl.dropbox.com/u/2611378/google-chrome-tanpaku-reader.crx](http://dl.dropbox.com/u/2611378/google-chrome-tanpaku-reader.crx)
+
+## 苦情・Pull Request など
+
+随時歓迎です。アイコンが気にくわないとかあればかっこいいアイコンを作って Pull Request してください。また不具合を見つけられた方は Issues に登録していただけますと幸いです。
