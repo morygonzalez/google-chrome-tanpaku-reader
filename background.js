@@ -28,11 +28,12 @@
           keyTime = getLastVisitedEpoch();
         }
         $($(res).find('ul.information li.info_notice').get().reverse()).each(function() {
-          var entry, entry_title, entry_titles, flgDup, user_name;
+          var entry, entry_title, entry_titles, flgDup, group_name, user_name;
           entry_titles = $(this).contents().filter(function() {
             return this.textContent.match(/\S/);
           });
-          user_name = $(this).find('a + a').attr('href').replace(/^(event|diary|file)\/user\/(.+?)\/.*/, "$2");
+          user_name = $(this).find('a + a').attr('href').replace(/^(?:event|diary|file)\/user\/(.+?)\/.*/, "$1");
+          group_name = $(this).find('a + a').attr('href').replace(/group\/(\d+)\/.+$/, "$1");
           if (entry_titles.length > 0) {
             entry_title = entry_titles[0].textContent;
           } else {
@@ -43,7 +44,9 @@
             entry_title: entry_title,
             entry_url: HOST + $(this).find('a + a').attr('href'),
             user_name: user_name,
-            user_image: "" + HOST + "images/users/" + user_name + "/icon/s.jpg"
+            user_image: "" + HOST + "images/users/" + user_name + "/icon/s.jpg",
+            group_name: group_name,
+            group_image: "" + HOST + "images/groups/" + group_name + "/s.jpg"
           };
           flgDup = false;
           $(entryList).each(function() {

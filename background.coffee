@@ -23,7 +23,10 @@ updateEntryList = (callback) ->
       # $.each と Array.reverse を組み合わせたので ごちゃっとしてる 旧→新 の順で見るため
       $($(res).find('ul.information li.info_notice').get().reverse()).each ->
         entry_titles = $(this).contents().filter(-> this.textContent.match(/\S/))
-        user_name = $(this).find('a + a').attr('href').replace(/^(event|diary|file)\/user\/(.+?)\/.*/, "$2")
+        user_name = $(this).find('a + a').attr('href')
+          .replace(/^(?:event|diary|file)\/user\/(.+?)\/.*/, "$1")
+        group_name = $(this).find('a + a').attr('href')
+          .replace(/group\/(\d+)\/.+$/, "$1")
         if entry_titles.length > 0
           entry_title = entry_titles[0].textContent
         else
@@ -34,6 +37,8 @@ updateEntryList = (callback) ->
           entry_url: HOST + $(this).find('a + a').attr('href')
           user_name: user_name
           user_image: "#{HOST}images/users/#{user_name}/icon/s.jpg"
+          group_name: group_name
+          group_image: "#{HOST}images/groups/#{group_name}/s.jpg"
 
         flgDup = false
 
