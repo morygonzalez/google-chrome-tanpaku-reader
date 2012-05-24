@@ -11,10 +11,12 @@ getAntenna = (callback) ->
       items = []
       $(res).find('ul.information li').each ->
         entry_titles = $(this).contents().filter(-> this.textContent.match(/\S/))
-        user_name = $(this).find('a + a').attr('href')
-          .replace(/^(?:event|diary|file)\/user\/(.+?)\/.*/, "$1")
-        group_name = $(this).find('a + a').attr('href')
-          .replace(/.*group\/(\d+)\/.+$/, "$1")
+        if /^(?:event|diary|file)\/user\/(.+?)\/.*/.test($(this).find('a + a').attr('href'))
+          user_name = $(this).find('a + a').attr('href')
+            .replace(/^(?:event|diary|file)\/user\/(.+?)\/.*/, "$1")
+        else
+          group_name = $(this).find('a + a').attr('href')
+            .replace(/.*group\/(\d+)\/.+$/, "$1")
         if entry_titles.length > 0
           entry_title = entry_titles[0].textContent
         else
@@ -40,7 +42,7 @@ openEntry = (entry) ->
 showEntry = (entry, unread_count) ->
   openEntry(entry)
   $('#title').text entry.entry_title
-  if entry.user_name
+  if entry.user_name?
     $('#user_icon').empty()
       .append $('<img>').attr(src: entry.user_image, title: entry.user_name)
     $('#user_name').empty()

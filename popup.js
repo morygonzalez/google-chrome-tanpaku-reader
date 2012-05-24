@@ -19,8 +19,11 @@
           entry_titles = $(this).contents().filter(function() {
             return this.textContent.match(/\S/);
           });
-          user_name = $(this).find('a + a').attr('href').replace(/^(?:event|diary|file)\/user\/(.+?)\/.*/, "$1");
-          group_name = $(this).find('a + a').attr('href').replace(/.*group\/(\d+)\/.+$/, "$1");
+          if (/^(?:event|diary|file)\/user\/(.+?)\/.*/.test($(this).find('a + a').attr('href'))) {
+            user_name = $(this).find('a + a').attr('href').replace(/^(?:event|diary|file)\/user\/(.+?)\/.*/, "$1");
+          } else {
+            group_name = $(this).find('a + a').attr('href').replace(/.*group\/(\d+)\/.+$/, "$1");
+          }
           if (entry_titles.length > 0) {
             entry_title = entry_titles[0].textContent;
           } else {
@@ -59,7 +62,7 @@
   showEntry = function(entry, unread_count) {
     openEntry(entry);
     $('#title').text(entry.entry_title);
-    if (entry.user_name) {
+    if (entry.user_name != null) {
       $('#user_icon').empty().append($('<img>').attr({
         src: entry.user_image,
         title: entry.user_name
