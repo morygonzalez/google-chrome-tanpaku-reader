@@ -33,7 +33,7 @@
             return this.textContent.match(/\S/);
           });
           user_name = $(this).find('a + a').attr('href').replace(/^(?:event|diary|file)\/user\/(.+?)\/.*/, "$1");
-          group_name = $(this).find('a + a').attr('href').replace(/group\/(\d+)\/.+$/, "$1");
+          group_name = $(this).find('a + a').attr('href').replace(/.*group\/(\d+)\/.+$/, "$1");
           if (entry_titles.length > 0) {
             entry_title = entry_titles[0].textContent;
           } else {
